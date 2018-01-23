@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using game.utils;
+using UnityEngine.UI;
 
 namespace game.controllers
 {
@@ -11,47 +12,50 @@ namespace game.controllers
 
 		public GameObject[] bullets;
 		public int maxbullets;
+        public int maxGloves;
 
+        public TextMesh Score;
 		private Transform parent;
 		private GameObject bullet;
 		private bool rotating = false;
+        [Header("UI Final")]
+        public GameObject MenuFinal;
+        public GameObject Win;
+        public GameObject Lose;
+        public TextMesh ScoreFinal;
+        /* Public Methods */
 
-
-		/* Public Methods */
-
-		// Use this for initialization
-		void Start () 
+        // Use this for initialization
+        void Start () 
 		{
 			parent = transform.parent.transform;
-		}
+            ProjectVars.Instance.maxbullets = maxbullets;
+            ProjectVars.Instance.maxGloves = maxGloves;
+
+        }
 
 		// Update is called once per frame
 		void Update () 
 		{
-			if (rotating)
-				Move ();
+            if (ProjectVars.Instance.maxbullets == 0 || ProjectVars.Instance.maxGloves == 0)
+            {
+                UI_Final_Active();
+            }
+            else
+            {
+                Score.text = "SCORE : " + ProjectVars.Instance.puntaje.ToString();
+                if (rotating)
+                    Move();
+            }
 		}
 
 		// Load the cannon (OnMouseClick Button)
 		public void Load()
 		{
 			Debug.Log("Load Cannon");
-			// get Selected angle from PojectsVars
-			int angle = ProjectVars.Instance.selected_angle;
-
-			//Find the selected bullet
-			for (int i = 0 ; i< bullets.Length ; i++){
-				if(angle == bullets[i].GetComponent<BulletController>().angle){
-					bullet = bullets [i];
-					// enable the movement of the cannon
-					rotating = true;
-					return;
-				}
-			}
-
-
-
-		
+            //Se obtiene la figura actual seleccionada
+            bullet = ProjectVars.Instance.shoot;
+            rotating = true;
 		}
 
 		public void Move()
@@ -71,33 +75,49 @@ namespace game.controllers
 			else
 			{
 				parent.eulerAngles = to; // define a concrete position
-				rotating = false; // stop the movement
-				Fire (bullet); // shoot
+				rotating = false; // stop the movements
 			}
 		}
 
 
-		public void Fire( GameObject prefap)
+		public void Fire(  )
 		{
+            //get the angle from BulletController Object
+            float angle = bullet.GetComponent<BulletController>().angle * 1.0f;
 
-
-			//get the angle from BulletController Object
-			float angle = prefap.GetComponent<BulletController>().angle * 1.0f;
-
-			// Intantiate the selected bullet with the cannon rotation  
-			Transform t_bullet = Instantiate (prefap.transform,
-											this.transform.position,
+            // Intantiate the selected bullet with the cannon rotation  
+           
+ 
+             Transform t_bullet = Instantiate (bullet.transform,
+											new Vector3(this.transform.position.x, this.transform.position.y,0f),
 											transform.rotation);
 
+            
 			// Calculate the direction of the shooting vector in x and y axis, multiplied by the firing rate
 			Vector3 velocity = new Vector3(Mathf.Cos(Mathf.Deg2Rad * angle)*5f,
 											Mathf.Sin(Mathf.Deg2Rad * angle)*5f, 0);
 			//assign the velocity
 			t_bullet.gameObject.GetComponent<Rigidbody2D> ().velocity = velocity;
-			Debug.Log("Fire");
+            
+            Debug.Log("Fire");
 
 		}
+        private void UI_Final_Active()
+        {
+            if (ProjectVars.Instance.maxGloves==0)
+            {
+                ScoreFinal.text = "SCORE : " + ProjectVars.Instance.puntaje.ToString();
+                Win.SetActive(true);
+                MenuFinal.SetActive(true);
+            }
+            else
+            {
+                ScoreFinal.text = "SCORE : " + ProjectVars.Instance.puntaje.ToString();
+                Lose.SetActive(true);
+                MenuFinal.SetActive(true);
+                
+            }
+        }
 
-
-	}
+    }
 }
