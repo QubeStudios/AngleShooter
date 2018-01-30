@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: ca41a50543645024bb80f2028b1fc508
+timeCreated: 1516899775
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 100
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Colleged
+  fontNames:
+  - Colleged
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

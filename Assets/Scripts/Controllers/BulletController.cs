@@ -1,44 +1,43 @@
-﻿using System.Collections;
+﻿using game.utils;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using game.utils;
 
-namespace game.controllers
+public class BulletController : MonoBehaviour
 {
-	public class BulletController : MonoBehaviour {
-		public int angle = 0;
-        public CannonController A;
-        // Use this for initialization
-        void Start () 
-		{
-			
-		}
-		// Update is called once per frame
-		void Update () 
-		{
-            if (this.transform.position.y > 7 || this.transform.position.x>7.5 || this.transform.position.y<-7.5)
-            {
-                ProjectVars.Instance.maxbullets--;
-                ProjectVars.Instance.ButtonFire = true;//Activar Boton de disparo
-                Destroy(this.gameObject);
-            }
-                
-        }
-		// Set the selected angle 
-		void OnMouseDown()
-		{
-			ProjectVars.Instance.selected_angle = angle;
-            ProjectVars.Instance.shoot = this.gameObject;
-            A.Load();
-            Debug.Log ("Selected :" + angle);
-		}
-        private void OnTriggerEnter2D(Collider2D collision)
-        {
+    public int angle = 0;
+    public int damage = 100;
+    // Use this for initialization
+    void Start()
+    {
 
-            ProjectVars.Instance.puntaje += 100;
-            ProjectVars.Instance.maxGloves--;
-            Destroy(collision.gameObject);
-            ProjectVars.Instance.ButtonFire = true;//Activar Boton de disparo
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (this.transform.position.y > 7 || this.transform.position.x > 7.5 || this.transform.position.y < -7.5)
+        {
+            ProjectVars.Instance.actButton_Fire = true;//Activar Boton de disparo
+            Destroy(this.gameObject);
+        }
+    }
+    void OnMouseDown()
+    {
+        ProjectVars.Instance.selected_angle = angle;
+        ProjectVars.Instance.actShoot = this.gameObject;
+        ProjectVars.Instance.actMove = true;
+
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "balloon")
+        {
+            collision.gameObject.GetComponent<Ballons>().GetDownALife(damage);
+            //Destroy(collision.gameObject);
+            ProjectVars.Instance.actButton_Fire = true;//Activar Boton de disparo
+            ProjectVars.Instance.score += 100;
+            DestroyObject(this.gameObject);
         }
     }
 }

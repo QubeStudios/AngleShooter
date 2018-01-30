@@ -7,12 +7,17 @@ namespace game.utils{
 
     public class ProjectVars : Singleton<ProjectVars>
     {
-        public int puntaje = 0;
-	    public int selected_angle = 0;
-        public GameObject shoot;
-        public bool ButtonFire = false;//Se utiliza para activar o desactiva la funcionalidad del boton mientras se genera el disparo
-        public int maxbullets = 0;
-        public int maxGloves;
+        [Header("BulletControllers")]
+        public GameObject actShoot;//Almacenara la bala selecionada
+        public int selected_angle;//Angulo seleccionado
+
+        public bool actMove = false;
+        public bool actFire = false;
+        public bool actButton_Fire = false;
+        
+        public int maxBullets = 2;
+        public int score = 0;
+      
         public static ProjectVars Instance
 	    {
 		    get
